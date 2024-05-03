@@ -37,7 +37,7 @@ jobs:
         run: ls -R build
 
       - name: Upload executable
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: my-executable
           path: build/Release/BemaniMetadataParser.exe
