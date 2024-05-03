@@ -1,4 +1,4 @@
-name: build
+name: Build
 
 on:
   push:
@@ -16,8 +16,8 @@ defaults:
     shell: bash
 
 jobs:
-  build:
-    name: Build
+  build_windows:
+    name: Build for Windows
     runs-on: windows-latest
 
     steps:
@@ -38,3 +38,29 @@ jobs:
         with:
           name: BemaniMetadataParser
           path: build/BemaniMetadataParser.exe
+
+  build_linux:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+
+      - name: Run CMake
+        run: cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: BemaniMetadataParser
+          path: build/BemaniMetadataParser
