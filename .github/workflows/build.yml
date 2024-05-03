@@ -39,5 +39,5 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v2
         with:
-          name: my-executable
-          path: build/Release/BemaniMetadataParser.exe
+          name: BemaniMetadataParser
+          path: build/BemaniMetadataParser.exe
