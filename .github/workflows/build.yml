@@ -29,3 +29,15 @@ jobs:
 
       - name: Run CMake
         run: cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: List all files in build directory
+        run: ls -R build
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-executable
+          path: build/Release/BemaniMetadataParser.exe
