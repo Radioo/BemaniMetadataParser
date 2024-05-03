@@ -33,11 +33,8 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
-      - name: List all files in build directory
-        run: ls -R build
-
       - name: Upload executable
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: BemaniMetadataParser
           path: build/BemaniMetadataParser.exe
