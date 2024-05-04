@@ -17,4 +17,6 @@ add_executable(BemaniMetadataParser main.cpp
         Model/Game/Game.cpp
         Model/Game/Game.hpp
         Model/Game/GameRelease.cpp
-        Model/Game/GameRelease.hpp)
+        Model/Game/GameRelease.hpp
+        Db.cpp
+        Db.hpp)
