@@ -17,7 +17,13 @@ endif()
 add_executable(BemaniMetadataParser main.cpp
         UI/App.cpp
         UI/App.hpp
-        UI/Frames/HomeFrame.cpp
-        UI/Frames/HomeFrame.hpp)
+        UI/Frames/BaseFrame.cpp
+        UI/Frames/BaseFrame.hpp
+        UI/Panels/HomePanel.cpp
+        UI/Panels/HomePanel.hpp
+        UI/Enums/MenuItem.hpp
+        UI/Enums/Page.hpp
+        UI/Panels/SDVX/SdvxParserPanel.cpp
+        UI/Panels/SDVX/SdvxParserPanel.hpp)
 
-target_link_libraries(BemaniMetadataParser PRIVATE Parser wxcore wxnet)
+target_link_libraries(BemaniMetadataParser PRIVATE Parser wxcore)

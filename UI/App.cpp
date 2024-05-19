@@ -3,13 +3,13 @@
 //
 
 #include "App.hpp"
-#include "Frames/HomeFrame.hpp"
+#include "Frames/BaseFrame.hpp"
 
-#include <Parser.hpp>
 #include <iostream>
 
 bool App::OnInit() {
-    auto* homeFrame = new HomeFrame();
-    homeFrame->Show(true);
+    auto* frame = new BaseFrame();
+    frame->Show();
+
     return true;
 }

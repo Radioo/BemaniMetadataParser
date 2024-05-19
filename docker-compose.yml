@@ -5,6 +5,10 @@ services:
       dockerfile: linux.Dockerfile
     volumes:
       - .:/app
+      - build:/build
     tty: true
     entrypoint: /bin/bash
     command: -c "cmake -B /build -S . -DCMAKE_BUILD_TYPE=Release && cd /build && make && cp BemaniMetadataParser /app/BemaniMetadataParser-linux"
+
+volumes:
+  build:
