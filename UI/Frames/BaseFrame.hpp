@@ -11,10 +11,11 @@
 #include <unordered_map>
 
 #include "../Enums/Page.hpp"
+#include "Parser.hpp"
 
 class BaseFrame : public wxFrame {
 public:
-    explicit BaseFrame();
+    explicit BaseFrame(Parser parser);
 
 protected:
     wxSimplebook* simpleBook;
@@ -22,11 +23,16 @@ protected:
     std::function<void(wxCommandEvent&)> onChangeFrame;
 
 private:
+    Parser parser;
     std::unordered_map<Page, std::uint8_t> pageMap;
 
     void setupMenuBar();
+
+    // Panels
     void setupHomePanel();
+    void setupSeriesPanel();
     void setupSDVXParserPanel();
+
     void onExit([[maybe_unused]] wxCommandEvent& event);
     void addPage(Page page, wxWindow* panel, const wxString& title);
     void changePage(Page page);

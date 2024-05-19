@@ -8,6 +8,9 @@
 
 enum class Page {
     Home,
+    Series,
+    Game,
+    Release,
     SDVXParser
 };
 

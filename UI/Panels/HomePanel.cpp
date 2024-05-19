@@ -4,6 +4,6 @@
 
 #include "HomePanel.hpp"
 
-HomePanel::HomePanel(wxWindow *parent) : wxPanel(parent) {
+HomePanel::HomePanel(wxWindow *parent, Parser &parser) : BasePanel(parent, parser) {
     new wxStaticText(this, wxID_ANY, "Home Panel");
 }

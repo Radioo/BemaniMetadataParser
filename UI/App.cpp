@@ -8,7 +8,7 @@
 #include <iostream>
 
 bool App::OnInit() {
-    auto* frame = new BaseFrame();
+    auto* frame = new BaseFrame(Parser());
     frame->Show();
 
     return true;

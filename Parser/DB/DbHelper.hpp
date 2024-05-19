@@ -6,13 +6,18 @@
 #define BEMANIMETADATAPARSER_DBHELPER_HPP
 
 #include <SQLiteCpp/SQLiteCpp.h>
+#include <optional>
 
 class DBHelper {
 public:
     static const SQLite::Database& getDB();
+    static void commit();
 
 private:
-    static inline const SQLite::Database db = SQLite::Database(":memory:"); // NOLINT(*-interfaces-global-init)
+    static inline SQLite::Database db = SQLite::Database(":memory:", SQLite::OPEN_READWRITE|SQLite::OPEN_CREATE); // NOLINT(*-interfaces-global-init)
+    static inline SQLite::Transaction* currentTransaction = nullptr;
+
+    static void createTables();
 };
 
 

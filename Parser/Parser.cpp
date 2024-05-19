@@ -6,5 +6,5 @@
 #include "DB/DbHelper.hpp"
 
 Parser::Parser() {
-    auto& db = DBHelper::getDB();
+
 }

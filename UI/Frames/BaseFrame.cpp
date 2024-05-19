@@ -6,17 +6,19 @@
 #include "../Panels/HomePanel.hpp"
 #include "../Enums/MenuItem.hpp"
 #include "../Panels/SDVX/SdvxParserPanel.hpp"
+#include "../Panels/General/SeriesPanel.hpp"
 
 #include <type_traits>
 
 typedef std::underlying_type<MenuItem>::type MenuItemType;
 
-BaseFrame::BaseFrame() : wxFrame(nullptr, wxID_ANY, "BEMANI Metadata Parser") {
+BaseFrame::BaseFrame(Parser parser) : wxFrame(nullptr, wxID_ANY, wxT("BEMANI Metadata Parser")), parser(parser) {
     setupMenuBar();
 
     simpleBook = new wxSimplebook(this, wxID_ANY);
 
     setupHomePanel();
+    setupSeriesPanel();
     setupSDVXParserPanel();
 
     changePage(Page::Home);
@@ -29,7 +31,7 @@ void BaseFrame::setupMenuBar() {
     // File
     auto* fileOptions = new wxMenu;
 
-    fileOptions->Append(static_cast<MenuItemType>(MenuItem::Home), "Home");
+    fileOptions->Append(static_cast<MenuItemType>(MenuItem::Home), wxT("Home"));
     Bind(wxEVT_MENU, [this](wxCommandEvent& event) {
         changePage(Page::Home);
     }, static_cast<MenuItemType>(MenuItem::Home));
@@ -37,18 +39,37 @@ void BaseFrame::setupMenuBar() {
     fileOptions->Append(wxID_EXIT);
     Bind(wxEVT_MENU, &BaseFrame::onExit, this, wxID_EXIT);
 
+    // General
+    auto* generalOptions = new wxMenu;
+
+    generalOptions->Append(static_cast<MenuItemType>(MenuItem::Series), wxT("Series"));
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {
+        changePage(Page::Series);
+    }, static_cast<MenuItemType>(MenuItem::Series));
+
+    generalOptions->Append(static_cast<MenuItemType>(MenuItem::Game), wxT("Game"));
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {
+        changePage(Page::Game);
+    }, static_cast<MenuItemType>(MenuItem::Game));
+
+    generalOptions->Append(static_cast<MenuItemType>(MenuItem::Release), wxT("Release"));
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {
+        changePage(Page::Release);
+    }, static_cast<MenuItemType>(MenuItem::Release));
+
 
     // SDVX
     auto* sdvxOptions = new wxMenu;
 
-    sdvxOptions->Append(static_cast<MenuItemType>(MenuItem::SDVXParser), "Parser");
+    sdvxOptions->Append(static_cast<MenuItemType>(MenuItem::SDVXParser), wxT("Parser"));
     Bind(wxEVT_MENU, [this](wxCommandEvent& event) {
         changePage(Page::SDVXParser);
     }, static_cast<MenuItemType>(MenuItem::SDVXParser));
 
     auto* menuBar = new wxMenuBar;
-    menuBar->Append(fileOptions, "File");
-    menuBar->Append(sdvxOptions, "SDVX");
+    menuBar->Append(fileOptions, wxT("File"));
+    menuBar->Append(generalOptions, wxT("General"));
+    menuBar->Append(sdvxOptions, wxT("SDVX"));
 
     SetMenuBar(menuBar);
 }
@@ -59,28 +80,25 @@ void BaseFrame::onExit([[maybe_unused]] wxCommandEvent& event) {
 }
 
 void BaseFrame::addPage(Page page, wxWindow *panel, const wxString &title) {
-    if(pageMap.count(page) > 0) {
-        throw std::runtime_error("Page already registered");
-    }
-
     pageMap[page] = simpleBook->GetPageCount();
     simpleBook->AddPage(panel, title);
 }
 
 void BaseFrame::changePage(Page page) {
-    if(pageMap.count(page) == 0) {
-        throw std::runtime_error("Page not registered");
-    }
-
     simpleBook->ChangeSelection(pageMap[page]);
 }
 
 void BaseFrame::setupHomePanel() {
-    auto* homePanel = new HomePanel(simpleBook);
-    addPage(Page::Home, homePanel, "Home");
+    auto* homePanel = new HomePanel(simpleBook, parser);
+    addPage(Page::Home, homePanel, wxT("Home"));
 }
 
 void BaseFrame::setupSDVXParserPanel() {
-    auto* sdvxParserPanel = new SDVXParserPanel(simpleBook);
-    addPage(Page::SDVXParser, sdvxParserPanel, "SDVX Parser");
+    auto* sdvxParserPanel = new SDVXParserPanel(simpleBook, parser);
+    addPage(Page::SDVXParser, sdvxParserPanel, wxT("SDVX Parser"));
+}
+
+void BaseFrame::setupSeriesPanel() {
+    auto* seriesPanel = new SeriesPanel(simpleBook, parser);
+    addPage(Page::Series, seriesPanel, wxT("Series"));
 }

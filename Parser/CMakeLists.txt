@@ -4,7 +4,12 @@ add_library(Parser STATIC
         Parser.cpp
         Parser.hpp
         DB/DbHelper.cpp
-        DB/DbHelper.hpp)
+        DB/DbHelper.hpp
+        Services/SeriesService.cpp
+        Services/SeriesService.hpp
+)
+
+message(STATUS "PARSER_CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 target_link_libraries(Parser PRIVATE SQLiteCpp)
 

@@ -6,12 +6,13 @@
 #define BEMANIMETADATAPARSER_PARSER_HPP
 
 
+#include "Services/SeriesService.hpp"
 
 class Parser {
 public:
     Parser();
 
-private:
+    SeriesService seriesService = SeriesService();
 };
 
 

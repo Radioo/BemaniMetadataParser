@@ -9,7 +9,10 @@
 
 enum class MenuItem : std::uint8_t {
     Home = 1,
-    SDVXParser = 2
+    Series = 2,
+    Game = 3,
+    Release = 4,
+    SDVXParser = 5
 };
 
 

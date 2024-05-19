@@ -6,10 +6,11 @@
 #define BEMANIMETADATAPARSER_HOMEPANEL_HPP
 
 #include <wx/wx.h>
+#include "BasePanel.hpp"
 
-class HomePanel : public wxPanel {
+class HomePanel : public BasePanel {
 public:
-    explicit HomePanel(wxWindow* parent);
+    explicit HomePanel(wxWindow* parent, Parser& parser);
 };
 
 
