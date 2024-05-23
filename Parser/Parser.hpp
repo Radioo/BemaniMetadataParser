@@ -7,12 +7,20 @@
 
 
 #include "Services/SeriesService.hpp"
+#include <functional>
+#include <cstdint>
 
 class Parser {
 public:
     Parser();
 
     SeriesService seriesService = SeriesService();
+
+    static void commit();
+    static void initialize();
+    static void setAfterCommitCallback(std::function<void()> callback);
+    static void setOnUncommitedChangesChangeCallback(std::function<void()> callback);
+    static std::uint64_t getUncommitedChanges();
 };
 
 

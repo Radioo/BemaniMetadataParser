@@ -8,11 +8,12 @@
 #include <cstdint>
 
 enum class MenuItem : std::uint8_t {
-    Home = 1,
-    Series = 2,
-    Game = 3,
-    Release = 4,
-    SDVXParser = 5
+    Home,
+    CommitDb,
+    Series,
+    Game,
+    Release,
+    SDVXParser
 };
 
 

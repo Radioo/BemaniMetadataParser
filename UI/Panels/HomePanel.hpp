@@ -11,6 +11,7 @@
 class HomePanel : public BasePanel {
 public:
     explicit HomePanel(wxWindow* parent, Parser& parser);
+    void afterCommit() override;
 };
 
 

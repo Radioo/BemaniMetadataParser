@@ -12,4 +12,5 @@ void SeriesService::addSeries(std::string&& name) {
 
     query.bind(1, name);
     query.exec();
+    DBHelper::incrementUncommitedChanges();
 }

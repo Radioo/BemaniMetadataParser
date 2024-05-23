@@ -6,10 +6,14 @@
 #define BEMANIMETADATAPARSER_SERIESSERVICE_HPP
 
 #include <string>
+#include "BaseService.hpp"
 
-class SeriesService {
+class SeriesService : public BaseService {
 public:
     void addSeries(std::string&& name);
+
+protected:
+    std::string getTableName() override {return "series";}
 };
 
 

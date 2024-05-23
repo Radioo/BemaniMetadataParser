@@ -7,6 +7,8 @@ add_library(Parser STATIC
         DB/DbHelper.hpp
         Services/SeriesService.cpp
         Services/SeriesService.hpp
+        Services/BaseService.cpp
+        Services/BaseService.hpp
 )
 
 message(STATUS "PARSER_CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")

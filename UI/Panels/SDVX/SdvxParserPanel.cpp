@@ -7,3 +7,5 @@
 SDVXParserPanel::SDVXParserPanel(wxWindow *parent, Parser &parser) : BasePanel(parent, parser) {
     wxStaticText* title = new wxStaticText(this, wxID_ANY, "SDVX Parser");
 }
+
+void SDVXParserPanel::afterCommit() {}

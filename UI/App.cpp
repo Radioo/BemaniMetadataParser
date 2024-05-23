@@ -6,10 +6,23 @@
 #include "Frames/BaseFrame.hpp"
 
 #include <iostream>
+#include <filesystem>
 
 bool App::OnInit() {
-    auto* frame = new BaseFrame(Parser());
-    frame->Show();
+    if(!std::filesystem::exists("data")) {
+        std::filesystem::create_directory("data");
+    }
+
+    try {
+        Parser parser;
+        Parser::initialize();
+        auto* frame = new BaseFrame(parser);
+        frame->Show();
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return false;
+    }
 
     return true;
 }

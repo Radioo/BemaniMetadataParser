@@ -39,6 +39,12 @@ void BaseFrame::setupMenuBar() {
     fileOptions->Append(wxID_EXIT);
     Bind(wxEVT_MENU, &BaseFrame::onExit, this, wxID_EXIT);
 
+    // DB
+    auto dbOptions = new wxMenu;
+
+    dbOptions->Append(static_cast<MenuItemType>(MenuItem::CommitDb), wxT("Commit"));
+    Bind(wxEVT_MENU, &BaseFrame::onCommitDb, this, static_cast<MenuItemType>(MenuItem::CommitDb));
+
     // General
     auto* generalOptions = new wxMenu;
 
@@ -57,7 +63,6 @@ void BaseFrame::setupMenuBar() {
         changePage(Page::Release);
     }, static_cast<MenuItemType>(MenuItem::Release));
 
-
     // SDVX
     auto* sdvxOptions = new wxMenu;
 
@@ -68,10 +73,17 @@ void BaseFrame::setupMenuBar() {
 
     auto* menuBar = new wxMenuBar;
     menuBar->Append(fileOptions, wxT("File"));
+    menuBar->Append(dbOptions, wxT("DB"));
     menuBar->Append(generalOptions, wxT("General"));
     menuBar->Append(sdvxOptions, wxT("SDVX"));
 
     SetMenuBar(menuBar);
+
+    CreateStatusBar();
+    Parser::setOnUncommitedChangesChangeCallback([this] {
+        std::string statusText = "Uncommited changes: " + std::to_string(Parser::getUncommitedChanges());
+        SetStatusText(statusText);
+    });
 }
 
 
@@ -86,6 +98,10 @@ void BaseFrame::addPage(Page page, wxWindow *panel, const wxString &title) {
 
 void BaseFrame::changePage(Page page) {
     simpleBook->ChangeSelection(pageMap[page]);
+    auto panel = (BasePanel*) simpleBook->GetCurrentPage();
+    Parser::setAfterCommitCallback([panel] {
+        panel->afterCommit();
+    });
 }
 
 void BaseFrame::setupHomePanel() {
@@ -101,4 +117,13 @@ void BaseFrame::setupSDVXParserPanel() {
 void BaseFrame::setupSeriesPanel() {
     auto* seriesPanel = new SeriesPanel(simpleBook, parser);
     addPage(Page::Series, seriesPanel, wxT("Series"));
+}
+
+void BaseFrame::onCommitDb(wxCommandEvent &event) {
+    try {
+        Parser::commit();
+    }
+    catch(const std::exception& e) {
+        wxMessageBox(e.what(), wxT("Error"), wxICON_ERROR);
+    }
 }

@@ -7,3 +7,5 @@
 HomePanel::HomePanel(wxWindow *parent, Parser &parser) : BasePanel(parent, parser) {
     new wxStaticText(this, wxID_ANY, "Home Panel");
 }
+
+void HomePanel::afterCommit() {}
