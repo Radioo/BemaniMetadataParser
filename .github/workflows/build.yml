@@ -34,7 +34,7 @@ jobs:
         run: cmake --build build --config Release --target install
 
       - name: Package executable
-        run: 7z a BemaniMetadataParser.zip build/install/*
+        run: cd ./build/install && 7z a ../../BemaniMetadataParser.zip ./*
 
       - name: Upload executable
         uses: actions/upload-artifact@v4
@@ -63,7 +63,7 @@ jobs:
         run: cd ./build && make
 
       - name: Package executable
-        run: tar -czvf BemaniMetadataParser-linux.tar.gz build/BemaniMetadataParser
+        run: cd ./build/install && tar -czvf ../../BemaniMetadataParser-linux.tar.gz ./*
 
       - name: Upload executable
         uses: actions/upload-artifact@v4
