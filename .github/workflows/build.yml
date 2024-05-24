@@ -31,13 +31,16 @@ jobs:
         run: cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release --target install
+
+      - name: Package executable
+        run: 7z a BemaniMetadataParser.zip build/install/*
 
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
           name: BemaniMetadataParser-windows
-          path: build/BemaniMetadataParser.exe
+          path: BemaniMetadataParser.zip
 
   build_linux:
     name: Build for Linux
@@ -59,8 +62,11 @@ jobs:
       - name: Build
         run: cd ./build && make
 
+      - name: Package executable
+        run: tar -czvf BemaniMetadataParser-linux.tar.gz build/BemaniMetadataParser
+
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
           name: BemaniMetadataParser-linux
-          path: build/BemaniMetadataParser
+          path: BemaniMetadataParser-linux.tar.gz

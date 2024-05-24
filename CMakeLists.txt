@@ -38,3 +38,7 @@ add_custom_command(TARGET BemaniMetadataParser POST_BUILD
         ${CMAKE_CURRENT_BINARY_DIR}/DDL.sql)
 
 target_link_libraries(BemaniMetadataParser PRIVATE Parser wxcore)
+
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
+install(TARGETS BemaniMetadataParser DESTINATION .)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Parser/DB/DDL.sql DESTINATION .)
