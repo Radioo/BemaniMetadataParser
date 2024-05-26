@@ -57,13 +57,13 @@ jobs:
         run: sudo apt-get install -y build-essential libgtk-3-dev
 
       - name: Run CMake
-        run: cmake -B build -S . -D CMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -S . -D CMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release --target install
 
       - name: Build
         run: cd ./build && make
 
       - name: Package executable
-        run: cd ./install && tar -czvf ../../BemaniMetadataParser-linux.tar.gz ./*
+        run: tar -czvf BemaniMetadataParser-linux.tar.gz ./build/install/*
 
       - name: Upload executable
         uses: actions/upload-artifact@v4
