@@ -10,7 +10,7 @@
 
 class SeriesService : public BaseService {
 public:
-    void addSeries(std::string&& name);
+    static void addSeries(std::string&& name);
 
 protected:
     std::string getTableName() override {return "series";}

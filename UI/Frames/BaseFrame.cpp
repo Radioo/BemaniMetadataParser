@@ -9,10 +9,11 @@
 #include "../Panels/General/SeriesPanel.hpp"
 
 #include <type_traits>
+#include <utility>
 
 typedef std::underlying_type<MenuItem>::type MenuItemType;
 
-BaseFrame::BaseFrame(Parser parser) : wxFrame(nullptr, wxID_ANY, wxT("BEMANI Metadata Parser")), parser(parser) {
+BaseFrame::BaseFrame(Parser parser) : wxFrame(nullptr, wxID_ANY, wxT("BEMANI Metadata Parser")), parser(std::move(parser)) {
     setupMenuBar();
 
     simpleBook = new wxSimplebook(this, wxID_ANY);
@@ -43,7 +44,7 @@ void BaseFrame::setupMenuBar() {
     auto dbOptions = new wxMenu;
 
     dbOptions->Append(static_cast<MenuItemType>(MenuItem::CommitDb), wxT("Commit"));
-    Bind(wxEVT_MENU, &BaseFrame::onCommitDb, this, static_cast<MenuItemType>(MenuItem::CommitDb));
+    Bind(wxEVT_MENU, &BaseFrame::onCommitDb, static_cast<MenuItemType>(MenuItem::CommitDb));
 
     // General
     auto* generalOptions = new wxMenu;
@@ -119,7 +120,7 @@ void BaseFrame::setupSeriesPanel() {
     addPage(Page::Series, seriesPanel, wxT("Series"));
 }
 
-void BaseFrame::onCommitDb(wxCommandEvent &event) {
+void BaseFrame::onCommitDb([[maybe_unused]] wxCommandEvent &event) {
     try {
         Parser::commit();
     }

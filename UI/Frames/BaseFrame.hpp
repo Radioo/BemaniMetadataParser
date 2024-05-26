@@ -34,7 +34,7 @@ private:
     void setupSDVXParserPanel();
 
     void onExit([[maybe_unused]] wxCommandEvent& event);
-    void onCommitDb([[maybe_unused]] wxCommandEvent& event);
+    static void onCommitDb([[maybe_unused]] [[maybe_unused]] wxCommandEvent& event);
     void addPage(Page page, wxWindow* panel, const wxString& title);
     void changePage(Page page);
 };
