@@ -63,7 +63,7 @@ jobs:
         run: cd ./build && make install
 
       - name: Package executable
-        run: tar -czvf BemaniMetadataParser-linux.tar.gz ./build/install/*
+        run: cd ./build/install && tar -czvf ../../BemaniMetadataParser-linux.tar.gz ./*
 
       - name: Upload executable
         uses: actions/upload-artifact@v4
