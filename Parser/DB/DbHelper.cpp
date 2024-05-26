@@ -48,6 +48,12 @@ void DBHelper::commit() {
     }
 
     dumpTable("series");
+    dumpTable("game");
+    dumpTable("game_release");
+    dumpTable("sdvx_song");
+    dumpTable("sdvx_chart");
+    dumpTable("sdvx_song_entry");
+    dumpTable("sdvx_chart_entry");
 
     uncommitedChanges = 0;
     if(afterCommitCallback != nullptr) {

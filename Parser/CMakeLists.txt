@@ -9,6 +9,8 @@ add_library(Parser STATIC
         Services/SeriesService.hpp
         Services/BaseService.cpp
         Services/BaseService.hpp
+        Services/GameService.cpp
+        Services/GameService.hpp
 )
 
 message(STATUS "PARSER_CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")

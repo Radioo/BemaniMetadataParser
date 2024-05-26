@@ -9,3 +9,7 @@ HomePanel::HomePanel(wxWindow *parent, Parser &parser) : BasePanel(parent, parse
 }
 
 void HomePanel::afterCommit() {}
+
+void HomePanel::onPanelOpen() {
+
+}

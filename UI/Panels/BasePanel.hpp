@@ -12,6 +12,7 @@ class BasePanel : public wxPanel {
 public:
     explicit BasePanel(wxWindow* parent, Parser& parser);
     virtual void afterCommit() = 0;
+    virtual void onPanelOpen() = 0;
 
 protected:
     Parser& parser;

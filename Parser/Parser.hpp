@@ -7,6 +7,7 @@
 
 
 #include "Services/SeriesService.hpp"
+#include "Services/GameService.hpp"
 #include <functional>
 #include <cstdint>
 
@@ -15,6 +16,7 @@ public:
     Parser();
 
     SeriesService seriesService = SeriesService();
+    GameService gameService = GameService();
 
     static void commit();
     static void initialize();

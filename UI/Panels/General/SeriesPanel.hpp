@@ -14,6 +14,7 @@ class SeriesPanel : public BasePanel {
 public:
     explicit SeriesPanel(wxWindow* parent, Parser& parser);
     void afterCommit() override;
+    void onPanelOpen() override;
 
 private:
     wxTextCtrl* newSeriesNameInput;

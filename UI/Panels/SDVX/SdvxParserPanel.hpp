@@ -12,6 +12,7 @@ class SDVXParserPanel : public BasePanel {
 public:
     explicit SDVXParserPanel(wxWindow *parent, Parser& parser);
     void afterCommit() override;
+    void onPanelOpen() override;
 };
 
 

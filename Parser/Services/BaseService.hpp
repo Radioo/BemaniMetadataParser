@@ -11,7 +11,7 @@
 class BaseService {
 public:
     std::vector<std::string> getColumns();
-    std::vector<std::vector<std::string>> getAllData();
+    virtual std::vector<std::vector<std::string>> getAllData();
 
 protected:
     virtual std::string getTableName() = 0;

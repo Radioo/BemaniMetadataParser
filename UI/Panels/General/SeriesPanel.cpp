@@ -105,3 +105,7 @@ void SeriesPanel::updateGridData() {
 void SeriesPanel::afterCommit() {
     updateGridData();
 }
+
+void SeriesPanel::onPanelOpen() {
+
+}

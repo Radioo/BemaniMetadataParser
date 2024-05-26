@@ -7,6 +7,7 @@
 #include "../Enums/MenuItem.hpp"
 #include "../Panels/SDVX/SdvxParserPanel.hpp"
 #include "../Panels/General/SeriesPanel.hpp"
+#include "../Panels/General/GamePanel.hpp"
 
 #include <type_traits>
 #include <utility>
@@ -20,6 +21,7 @@ BaseFrame::BaseFrame(Parser parser) : wxFrame(nullptr, wxID_ANY, wxT("BEMANI Met
 
     setupHomePanel();
     setupSeriesPanel();
+    setupGamePanel();
     setupSDVXParserPanel();
 
     changePage(Page::Home);
@@ -103,6 +105,7 @@ void BaseFrame::changePage(Page page) {
     Parser::setAfterCommitCallback([panel] {
         panel->afterCommit();
     });
+    panel->onPanelOpen();
 }
 
 void BaseFrame::setupHomePanel() {
@@ -127,4 +130,9 @@ void BaseFrame::onCommitDb([[maybe_unused]] wxCommandEvent &event) {
     catch(const std::exception& e) {
         wxMessageBox(e.what(), wxT("Error"), wxICON_ERROR);
     }
+}
+
+void BaseFrame::setupGamePanel() {
+    auto* gamePanel = new GamePanel(simpleBook, parser);
+    addPage(Page::Game, gamePanel, wxT("Game"));
 }

@@ -31,6 +31,7 @@ private:
     // Panels
     void setupHomePanel();
     void setupSeriesPanel();
+    void setupGamePanel();
     void setupSDVXParserPanel();
 
     void onExit([[maybe_unused]] wxCommandEvent& event);
