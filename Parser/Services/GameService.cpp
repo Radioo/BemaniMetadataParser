@@ -47,3 +47,16 @@ std::vector<std::vector<std::string>> GameService::getAllData() {
 
     return data;
 }
+
+std::vector<std::tuple<std::uint32_t, std::string>> GameService::getGames() {
+    auto& db = DBHelper::getDB();
+
+    SQLite::Statement query(db, "SELECT * FROM game");
+    std::vector<std::tuple<std::uint32_t, std::string>> games;
+
+    while(query.executeStep()) {
+        games.emplace_back(query.getColumn(0).getUInt(), query.getColumn(2).getString());
+    }
+
+    return games;
+}

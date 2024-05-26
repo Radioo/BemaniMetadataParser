@@ -8,6 +8,7 @@
 #include "../Panels/SDVX/SdvxParserPanel.hpp"
 #include "../Panels/General/SeriesPanel.hpp"
 #include "../Panels/General/GamePanel.hpp"
+#include "../Panels/General/ReleasePanel.hpp"
 
 #include <type_traits>
 #include <utility>
@@ -22,6 +23,7 @@ BaseFrame::BaseFrame(Parser parser) : wxFrame(nullptr, wxID_ANY, wxT("BEMANI Met
     setupHomePanel();
     setupSeriesPanel();
     setupGamePanel();
+    setupReleasePanel();
     setupSDVXParserPanel();
 
     changePage(Page::Home);
@@ -135,4 +137,9 @@ void BaseFrame::onCommitDb([[maybe_unused]] wxCommandEvent &event) {
 void BaseFrame::setupGamePanel() {
     auto* gamePanel = new GamePanel(simpleBook, parser);
     addPage(Page::Game, gamePanel, wxT("Game"));
+}
+
+void BaseFrame::setupReleasePanel() {
+    auto* releasePanel = new ReleasePanel(simpleBook, parser);
+    addPage(Page::Release, releasePanel, wxT("Release"));
 }

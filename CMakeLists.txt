@@ -32,7 +32,9 @@ add_executable(BemaniMetadataParser main.cpp
         UI/Panels/BasePanel.cpp
         UI/Panels/BasePanel.hpp
         UI/Panels/General/GamePanel.cpp
-        UI/Panels/General/GamePanel.hpp)
+        UI/Panels/General/GamePanel.hpp
+        UI/Panels/General/ReleasePanel.cpp
+        UI/Panels/General/ReleasePanel.hpp)
 
 add_custom_command(TARGET BemaniMetadataParser POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy

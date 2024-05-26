@@ -8,6 +8,7 @@
 
 #include "Services/SeriesService.hpp"
 #include "Services/GameService.hpp"
+#include "Services/ReleaseService.hpp"
 #include <functional>
 #include <cstdint>
 
@@ -17,6 +18,7 @@ public:
 
     SeriesService seriesService = SeriesService();
     GameService gameService = GameService();
+    ReleaseService releaseService = ReleaseService();
 
     static void commit();
     static void initialize();
