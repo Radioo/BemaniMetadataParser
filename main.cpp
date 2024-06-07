@@ -1,4 +1,5 @@
-#include <wx/wx.h>
-#include "UI/App.hpp"
+#include <iostream>
 
-wxIMPLEMENT_APP(App); // NOLINT(*-pro-type-static-cast-downcast)
+int main() {
+    std::cout << "hi\n";
+}
