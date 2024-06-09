@@ -6,8 +6,16 @@
 #define BEMANIMETADATAPARSER_CHARTMANAGER_HPP
 
 
-class ChartManager {
+#include "Manager/GameManager.hpp"
+#include "ChartManagerConfig.hpp"
 
+class ChartManager {
+public:
+    explicit ChartManager(ChartManagerConfig config);
+    GameManager& getGameManager();
+private:
+    ChartManagerConfig config;
+    GameManager gameManager;
 };
 
 

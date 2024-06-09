@@ -14,11 +14,11 @@
 
 class GameManager {
 public:
-    GameManager();
+    explicit GameManager(std::filesystem::path& seriesCsvPath);
+    void addSeries(std::string&& name);
+    std::vector<Series> getSeries();
 private:
-    std::unordered_map<std::uint32_t, Series> series;
-    std::unordered_map<std::uint32_t, Game> games;
-    std::unordered_map<std::uint32_t, Release> releases;
+    std::filesystem::path& seriesCsvPath;
 
     void loadData();
 };
