@@ -14,6 +14,21 @@ void DBUtil::initialize() {
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL
         );
+
+        CREATE TABLE game (
+            id INTEGER PRIMARY KEY,
+            series_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            version INTEGER NOT NULL,
+            FOREIGN KEY(series_id) REFERENCES series(id)
+        );
+
+        CREATE TABLE release (
+            id INTEGER PRIMARY KEY,
+            game_id INTEGER NOT NULL,
+            code TEXT NOT NULL,
+            FOREIGN KEY(game_id) REFERENCES game(id)
+        );
     )");
 }
 
