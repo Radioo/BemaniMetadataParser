@@ -7,15 +7,18 @@
 
 
 #include "Manager/GameManager.hpp"
+#include "Manager/SDVXManager.hpp"
 #include "ChartManagerConfig.hpp"
 
 class ChartManager {
 public:
     explicit ChartManager(ChartManagerConfig config);
     GameManager& getGameManager();
+    SDVXManager& getSDVXManager();
 private:
     ChartManagerConfig config;
     GameManager gameManager;
+    SDVXManager sdvxManager;
 };
 
 
