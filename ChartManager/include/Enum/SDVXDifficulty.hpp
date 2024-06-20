@@ -5,6 +5,11 @@
 #ifndef BEMANIMETADATAPARSER_SDVXDIFFICULTY_HPP
 #define BEMANIMETADATAPARSER_SDVXDIFFICULTY_HPP
 
+#ifdef INFINITE
+#define INFINITE_COPY INFINITE
+#undef INFINITE
+#endif
+
 #include <cstdint>
 
 enum class SDVXDifficulty : std::uint8_t {
@@ -14,5 +19,10 @@ enum class SDVXDifficulty : std::uint8_t {
     INFINITE = 3,
     MAXIMUM = 4,
 };
+
+#ifdef INFINITE_COPY
+#define INFINITE INFINITE_COPY
+#undef INFINITE_COPY
+#endif
 
 #endif //BEMANIMETADATAPARSER_SDVXDIFFICULTY_HPP

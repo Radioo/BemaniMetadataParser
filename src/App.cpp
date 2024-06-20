@@ -3,10 +3,13 @@
 //
 
 #include "App.hpp"
+#include "ChartManager.hpp"
+#include "Frames/MainFrame.hpp"
 
 bool App::OnInit() {
     try {
-        throw std::runtime_error("An error occurred");
+        auto* mainFrame = new MainFrame();
+        mainFrame->Show();
     }
     catch(std::exception& e) {
         wxMessageBox(e.what(), "Error", wxICON_ERROR);

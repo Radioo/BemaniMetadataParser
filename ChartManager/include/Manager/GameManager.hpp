@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <cstdint>
 #include <filesystem>
+#include <vector>
 
 #include "Model/Series.hpp"
 #include "Model/Game.hpp"

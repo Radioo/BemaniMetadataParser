@@ -17,6 +17,8 @@ CPMAddPackage("gh:wxWidgets/wxWidgets@3.2.5")
 add_executable(BemaniMetadataParser
         main.cpp
         src/App.cpp
+        src/Frames/MainFrame.cpp
+        src/Panels/SeriesPanel.cpp
 )
 
 target_link_libraries(BemaniMetadataParser PRIVATE ChartManager wxcore)
