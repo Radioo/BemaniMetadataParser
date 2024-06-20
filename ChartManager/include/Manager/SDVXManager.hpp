@@ -12,10 +12,12 @@
 
 #include "../Enum/SDVXDifficulty.hpp"
 #include "../Model/SDVXParsedSong.hpp"
+#include "../Model/SDVXSong.hpp"
+#include "../Model/SDVXSongEntry.hpp"
 
 class SDVXManager {
 public:
-    std::vector<SDVXParsedSong> parseMusicDb(std::filesystem::path& musicDbPath);
+    std::vector<SDVXParsedSong> parseMusicDb(std::filesystem::path& musicDbPath, std::uint32_t releaseId);
 private:
     static SDVXDifficulty getDifficultyFromXml(std::string&& difficulty);
 };

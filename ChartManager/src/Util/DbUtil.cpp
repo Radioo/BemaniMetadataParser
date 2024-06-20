@@ -29,6 +29,14 @@ void DBUtil::initialize() {
             code TEXT NOT NULL,
             FOREIGN KEY(game_id) REFERENCES game(id)
         );
+
+        CREATE TABLE sdvx_song (
+            id INTEGER PRIMARY KEY,
+            release_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            artist TEXT NOT NULL,
+            FOREIGN KEY(release_id) REFERENCES release(id)
+        );
     )");
 }
 

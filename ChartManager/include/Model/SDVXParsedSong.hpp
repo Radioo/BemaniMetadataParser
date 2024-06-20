@@ -11,11 +11,13 @@
 #include <optional>
 
 #include "SDVXParsedChart.hpp"
+#include "SDVXSong.hpp"
 #include "../Enum/ParseStatus.hpp"
 
 struct SDVXParsedSong {
     std::optional<ParseStatus> songParseStatus;
     std::optional<ParseStatus> songEntryParseStatus;
+
     std::string title;
     std::string artist;
     std::uint32_t internalId;

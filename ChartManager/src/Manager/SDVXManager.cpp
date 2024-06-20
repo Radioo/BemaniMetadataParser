@@ -8,6 +8,7 @@
 #include "../../include/Manager/SDVXManager.hpp"
 #include "../Util/FileUtil.hpp"
 #include "../Util/EncodingUtil.hpp"
+#include "../Util/DbUtil.hpp"
 
 SDVXDifficulty SDVXManager::getDifficultyFromXml(std::string&& difficulty) {
     if(difficulty == "novice") {
@@ -29,7 +30,7 @@ SDVXDifficulty SDVXManager::getDifficultyFromXml(std::string&& difficulty) {
     throw std::invalid_argument("Invalid difficulty " + difficulty);
 }
 
-std::vector<SDVXParsedSong> SDVXManager::parseMusicDb(std::filesystem::path& musicDbPath) {
+std::vector<SDVXParsedSong> SDVXManager::parseMusicDb(std::filesystem::path& musicDbPath, std::uint32_t releaseId) {
     auto xmlString = FileUtil::readFileIntoString(musicDbPath);
     xmlString = EncodingUtil::convertSDVXMusicDbToUtf8(xmlString);
     pugi::xml_document doc;
