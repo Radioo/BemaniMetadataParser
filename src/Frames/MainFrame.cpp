@@ -6,18 +6,22 @@
 #include "../Panels/SeriesPanel.hpp"
 #include "../Enums/MenuOption.hpp"
 
-MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, wxT("Bemani Metadata Parser"), wxDefaultPosition, {1280, 780}) {
+MainFrame::MainFrame(ChartManager& chartManager) : wxFrame(nullptr, wxID_ANY, wxT("Bemani Metadata Parser"), wxDefaultPosition, {1280, 780}), chartManager(chartManager) {
     this->setupMenuBar();
 }
 
 void MainFrame::setupMenuBar() {
     auto* fileOptions = new wxMenu;
+
+    fileOptions->Append(static_cast<int>(MenuOption::COMMIT), wxT("Commit"));
+    Bind(wxEVT_MENU, &MainFrame::onCommit, this, static_cast<int>(MenuOption::COMMIT));
+
     fileOptions->Append(wxID_EXIT);
     Bind(wxEVT_MENU, &MainFrame::onExit, this, wxID_EXIT);
 
     auto* generalOptions = new wxMenu;
     generalOptions->Append(static_cast<int>(MenuOption::SERIES), wxT("Series"));
-    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {this->switchPanel(new SeriesPanel(this));}, static_cast<int>(MenuOption::SERIES));
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {this->switchPanel(new SeriesPanel(this, this->chartManager));}, static_cast<int>(MenuOption::SERIES));
 
     auto* menuBar = new wxMenuBar;
     menuBar->Append(fileOptions, wxT("File"));
@@ -37,4 +41,8 @@ void MainFrame::switchPanel(wxPanel* panel) {
 
     this->currentPanel = panel;
     Layout();
+}
+
+void MainFrame::onCommit(wxCommandEvent& event) {
+    this->chartManager.commit();
 }

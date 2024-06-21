@@ -12,6 +12,8 @@ public:
     static SQLite::Database& getDb();
     static void initialize();
     static SQLite::Statement prepare(const std::string& query);
+    static void load();
+    static void commit();
 private:
     static inline SQLite::Database db = SQLite::Database(":memory:", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE); // NOLINT(*-interfaces-global-init)
 };

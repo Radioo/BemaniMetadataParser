@@ -13,6 +13,7 @@
 class ChartManager {
 public:
     explicit ChartManager(ChartManagerConfig config);
+    void commit();
     GameManager& getGameManager();
     SDVXManager& getSDVXManager();
 private:

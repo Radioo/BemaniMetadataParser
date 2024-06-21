@@ -8,6 +8,7 @@
 #include <cstdint>
 
 enum class MenuOption : std::uint8_t {
+    COMMIT,
     SERIES,
     GAME,
     RELEASE,

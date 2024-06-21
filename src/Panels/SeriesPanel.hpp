@@ -6,10 +6,19 @@
 #define BEMANIMETADATAPARSER_SERIESPANEL_HPP
 
 #include <wx/wx.h>
+#include <wx/grid.h>
+
+#include "ChartManager.hpp"
 
 class SeriesPanel : public wxPanel {
 public:
-    SeriesPanel(wxFrame* parent);
+    SeriesPanel(wxWindow* parent, ChartManager& chartManager);
+private:
+    ChartManager& chartManager;
+    wxGrid* seriesGrid;
+
+    void loadData();
+    void openSeriesEditor(wxCommandEvent& event);
 };
 
 

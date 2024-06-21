@@ -13,6 +13,6 @@ add_library(ChartManager STATIC
         src/Util/FileUtil.cpp
 )
 
-target_link_libraries(ChartManager PRIVATE csv SQLiteCpp Iconv::Iconv pugixml)
+target_link_libraries(ChartManager PRIVATE csv SQLiteCpp Iconv::Iconv pugixml gcov)
 
 target_include_directories(ChartManager PUBLIC include)

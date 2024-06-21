@@ -11,13 +11,15 @@
 
 class MainFrame : public wxFrame {
 public:
-    MainFrame();
+    MainFrame(ChartManager& chartManager);
 private:
+    ChartManager& chartManager;
     wxPanel* currentPanel = nullptr;
     wxBoxSizer* mainSizer = nullptr;
 
     void setupMenuBar();
     void onExit(wxCommandEvent& event);
+    void onCommit(wxCommandEvent& event);
     void switchPanel(wxPanel* panel);
 };
 

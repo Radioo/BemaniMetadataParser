@@ -7,17 +7,22 @@
 #include "Frames/MainFrame.hpp"
 
 bool App::OnInit() {
+    ChartManager chartManager({});
+    auto* mainFrame = new MainFrame(chartManager);
+    mainFrame->Show();
+
+    return true;
+}
+
+bool App::OnExceptionInMainLoop() {
     try {
-        auto* mainFrame = new MainFrame();
-        mainFrame->Show();
+        throw;
     }
     catch(std::exception& e) {
         wxMessageBox(e.what(), "Error", wxICON_ERROR);
-        return false;
     }
     catch(...) {
         wxMessageBox("An unknown error occurred", "Error", wxICON_ERROR);
-        return false;
     }
 
     return true;
