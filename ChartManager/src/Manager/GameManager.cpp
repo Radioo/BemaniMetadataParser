@@ -76,7 +76,7 @@ std::vector<Game> GameManager::getGames() {
     return games;
 }
 
-void GameManager::addRelease(std::uint32_t gameId, std::string&& code) {
+void GameManager::addRelease(std::uint32_t gameId, std::string& code) {
     auto query = DBUtil::prepare("INSERT INTO release (game_id, code) VALUES (?, ?)");
     query.bind(1, gameId);
     query.bind(2, code);

@@ -9,7 +9,7 @@
 
 #include <wx/wx.h>
 
-class EditGamePanel : public wxPanel{
+class EditGamePanel : public wxPanel {
 public:
     EditGamePanel(wxWindow* parent, Game* game, ChartManager& chartManager);
 private:

@@ -18,7 +18,7 @@ private:
     wxGrid* gameGrid;
 
     void loadData();
-    void openGameEditor(wxCommandEvent& event, Game* series);
+    void openGameEditor(wxCommandEvent& event, Game* game);
 };
 
 

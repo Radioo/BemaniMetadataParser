@@ -23,6 +23,8 @@ add_executable(BemaniMetadataParser
         src/Panels/EditSeriesPanel.cpp
         src/Panels/GamePanel.cpp
         src/Panels/EditGamePanel.cpp
+        src/Panels/ReleasePanel.cpp
+        src/Panels/EditReleasePanel.cpp
 )
 
 target_link_libraries(BemaniMetadataParser PRIVATE ChartManager wxcore)

@@ -32,7 +32,7 @@ public:
 
     std::vector<Release> getReleases();
     Release getRelease(std::uint32_t id);
-    void addRelease(std::uint32_t gameId, std::string&& code);
+    void addRelease(std::uint32_t gameId, std::string& code);
     void updateRelease(Release& release);
     void deleteRelease(std::uint32_t id);
 private:

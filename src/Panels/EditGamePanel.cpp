@@ -14,6 +14,9 @@ EditGamePanel::EditGamePanel(wxWindow* parent, Game* game, ChartManager& chartMa
     seriesSizer->Add(seriesLabel, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
 
     this->series = this->chartManager.getGameManager().getSeries();
+    if(this->series.empty()) {
+        throw std::runtime_error("No series found");
+    }
     auto choices = wxArrayString();
     for(const auto& seriesItem : this->series) {
         choices.Add(seriesItem.name);

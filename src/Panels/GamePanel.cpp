@@ -69,9 +69,9 @@ void GamePanel::loadData() {
     gameGrid->AutoSizeRows();
 }
 
-void GamePanel::openGameEditor(wxCommandEvent& event, Game* series) {
+void GamePanel::openGameEditor(wxCommandEvent& event, Game* game) {
     auto* dialog = new wxDialog(this, wxID_ANY, wxT("Edit Game"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
-    auto* panel = new EditGamePanel(dialog, series, this->chartManager);
+    auto* panel = new EditGamePanel(dialog, game, this->chartManager);
     auto* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(panel, 1, wxEXPAND, 5);
     dialog->SetSizer(sizer);
