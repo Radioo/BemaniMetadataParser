@@ -11,6 +11,8 @@
 class UIHelper {
 public:
     static void setCommonGridAttributes(wxGrid* grid);
+    static wxString getRowIdValue(wxGrid* grid, wxGridEvent& event);
+    static wxMenu* getGridMenu();
 };
 
 

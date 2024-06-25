@@ -18,7 +18,7 @@ private:
     wxGrid* seriesGrid;
 
     void loadData();
-    void openSeriesEditor(wxCommandEvent& event);
+    void openSeriesEditor(wxCommandEvent& event, Series* series);
 };
 
 

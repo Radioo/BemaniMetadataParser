@@ -15,12 +15,29 @@ SeriesPanel::SeriesPanel(wxWindow* parent, ChartManager& chartManager) : wxPanel
 
     auto* addSeriesButton = new wxButton(this, wxID_ANY, wxT("Add Series"), wxDefaultPosition, wxDefaultSize, 0);
     headerSizer->Add(addSeriesButton, 0, wxALL, 5);
-    Bind(wxEVT_BUTTON, &SeriesPanel::openSeriesEditor, this, addSeriesButton->GetId());
+    Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        this->openSeriesEditor(event, nullptr);
+    }, addSeriesButton->GetId());
 
     mainSizer->Add(headerSizer, 0, wxEXPAND, 5);
 
     seriesGrid = new wxGrid(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     UIHelper::setCommonGridAttributes(seriesGrid);
+    Bind(wxEVT_GRID_CELL_RIGHT_CLICK, [this](wxGridEvent& event) {
+        auto seriesId = std::stoi(UIHelper::getRowIdValue(seriesGrid, event).ToStdString());
+
+        auto* menu = UIHelper::getGridMenu();
+        Bind(wxEVT_MENU, [this, &seriesId](wxCommandEvent& event) {
+            auto series = this->chartManager.getGameManager().getSeries(seriesId);
+            this->openSeriesEditor(event, &series);
+        }, wxID_EDIT);
+        Bind(wxEVT_MENU, [this, &seriesId](wxCommandEvent& event) {
+            this->chartManager.getGameManager().deleteSeries(seriesId);
+            this->loadData();
+        }, wxID_DELETE);
+
+        PopupMenu(menu);
+    });
 
     mainSizer->Add(seriesGrid, 1, wxALL | wxEXPAND, 5);
 
@@ -45,11 +62,12 @@ void SeriesPanel::loadData() {
 
     seriesGrid->SetTable(table, true);
     seriesGrid->AutoSizeColumns();
+    seriesGrid->AutoSizeRows();
 }
 
-void SeriesPanel::openSeriesEditor(wxCommandEvent& event) {
-    auto* dialog = new wxDialog(this, wxID_ANY, wxT("Add Series"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
-    auto* panel = new EditSeriesPanel(dialog, nullptr, this->chartManager);
+void SeriesPanel::openSeriesEditor(wxCommandEvent& event, Series* series) {
+    auto* dialog = new wxDialog(this, wxID_ANY, wxT("Edit Series"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    auto* panel = new EditSeriesPanel(dialog, series, this->chartManager);
     auto* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(panel, 1, wxEXPAND, 5);
     dialog->SetSizer(sizer);

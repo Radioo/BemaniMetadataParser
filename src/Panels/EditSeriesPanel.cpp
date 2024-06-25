@@ -16,6 +16,9 @@ EditSeriesPanel::EditSeriesPanel(wxWindow* parent, Series* series, ChartManager&
     nameSizer->Add(nameLabel, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
 
     nameTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
+    if(this->series != nullptr) {
+        nameTextCtrl->SetValue(wxString(this->series->name));
+    }
     nameSizer->Add(nameTextCtrl, 1, wxALL | wxALIGN_CENTER_VERTICAL, 5);
 
 
@@ -30,7 +33,16 @@ EditSeriesPanel::EditSeriesPanel(wxWindow* parent, Series* series, ChartManager&
 }
 
 void EditSeriesPanel::onSave(wxCommandEvent& event) {
-    auto value = nameTextCtrl->GetValue();
-    this->chartManager.getGameManager().addSeries(value.ToStdString());
+    auto gameManager = this->chartManager.getGameManager();
+    auto name = nameTextCtrl->GetValue().ToStdString();
+
+    if(this->series == nullptr) {
+        gameManager.addSeries(name);
+    }
+    else {
+        this->series->name = name;
+        gameManager.updateSeries(*this->series);
+    }
+
     this->GetParent()->Close();
 }

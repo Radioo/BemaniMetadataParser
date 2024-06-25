@@ -4,6 +4,7 @@
 
 #include "MainFrame.hpp"
 #include "../Panels/SeriesPanel.hpp"
+#include "../Panels/GamePanel.hpp"
 #include "../Enums/MenuOption.hpp"
 
 MainFrame::MainFrame(ChartManager& chartManager) : wxFrame(nullptr, wxID_ANY, wxT("Bemani Metadata Parser"), wxDefaultPosition, {1280, 780}), chartManager(chartManager) {
@@ -23,6 +24,9 @@ void MainFrame::setupMenuBar() {
     generalOptions->Append(static_cast<int>(MenuOption::SERIES), wxT("Series"));
     Bind(wxEVT_MENU, [this](wxCommandEvent& event) {this->switchPanel(new SeriesPanel(this, this->chartManager));}, static_cast<int>(MenuOption::SERIES));
 
+    generalOptions->Append(static_cast<int>(MenuOption::GAME), wxT("Game"));
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {this->switchPanel(new GamePanel(this, this->chartManager));}, static_cast<int>(MenuOption::GAME));
+
     auto* menuBar = new wxMenuBar;
     menuBar->Append(fileOptions, wxT("File"));
     menuBar->Append(generalOptions, wxT("General"));
@@ -36,7 +40,7 @@ void MainFrame::onExit(wxCommandEvent& event) {
 
 void MainFrame::switchPanel(wxPanel* panel) {
     if(this->currentPanel != nullptr) {
-        this->currentPanel->Close();
+        this->currentPanel->Destroy();
     }
 
     this->currentPanel = panel;

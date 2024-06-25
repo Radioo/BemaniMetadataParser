@@ -28,6 +28,8 @@ void DBUtil::initialize() {
             FOREIGN KEY(series_id) REFERENCES series(id)
         );
 
+        CREATE UNIQUE INDEX game_series_id_version_index ON game(series_id, version);
+
         CREATE TABLE release (
             id INTEGER PRIMARY KEY,
             game_id INTEGER NOT NULL,
