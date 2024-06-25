@@ -17,18 +17,24 @@
 class GameManager {
 public:
     explicit GameManager(std::filesystem::path& seriesCsvPath);
+
+    std::vector<Series> getSeries();
+    Series getSeries(std::uint32_t id);
     void addSeries(std::string& name);
     void updateSeries(Series& series);
     void deleteSeries(std::uint32_t id);
-    std::vector<Series> getSeries();
-    Series getSeries(std::uint32_t id);
-    void addGame(std::uint32_t seriesId, std::string& name, std::uint8_t version);
+
     std::vector<Game> getGames();
     Game getGame(std::uint32_t id);
-    void deleteGame(std::uint32_t id);
+    void addGame(std::uint32_t seriesId, std::string& name, std::uint8_t version);
     void updateGame(Game& game);
-    void addRelease(std::uint32_t gameId, std::string&& code);
+    void deleteGame(std::uint32_t id);
+
     std::vector<Release> getReleases();
+    Release getRelease(std::uint32_t id);
+    void addRelease(std::uint32_t gameId, std::string&& code);
+    void updateRelease(Release& release);
+    void deleteRelease(std::uint32_t id);
 private:
     std::filesystem::path& seriesCsvPath;
 

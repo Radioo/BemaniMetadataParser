@@ -177,3 +177,39 @@ void GameManager::updateGame(Game& game) {
         throw std::runtime_error("Failed to update game");
     }
 }
+
+Release GameManager::getRelease(std::uint32_t id) {
+    auto query = DBUtil::prepare("SELECT * FROM release WHERE id = ?");
+    query.bind(1, id);
+    auto result = query.executeStep();
+
+    if(!result) {
+        throw std::runtime_error("Release with id " + std::to_string(id) + " not found");
+    }
+
+    return {
+        query.getColumn(0).getUInt(),
+        query.getColumn(1).getUInt(),
+        query.getColumn(2).getString()
+    };
+}
+
+void GameManager::updateRelease(Release& release) {
+    auto query = DBUtil::prepare("UPDATE release SET game_id = ?, code = ? WHERE id = ?");
+    query.bind(1, release.gameId);
+    query.bind(2, release.code);
+    query.bind(3, release.id);
+    auto changes = query.exec();
+    if(changes != 1) {
+        throw std::runtime_error("Failed to update release");
+    }
+}
+
+void GameManager::deleteRelease(std::uint32_t id) {
+    auto query = DBUtil::prepare("DELETE FROM release WHERE id = ?");
+    query.bind(1, id);
+    auto changes = query.exec();
+    if(changes != 1) {
+        throw std::runtime_error("Failed to delete release");
+    }
+}

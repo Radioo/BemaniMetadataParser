@@ -13,6 +13,8 @@ SQLite::Database& DBUtil::getDb() {
 
 void DBUtil::initialize() {
     db.exec(R"(
+        PRAGMA foreign_keys = ON;
+
         CREATE TABLE series (
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL
@@ -25,7 +27,7 @@ void DBUtil::initialize() {
             series_id INTEGER NOT NULL,
             name TEXT NOT NULL,
             version INTEGER NOT NULL,
-            FOREIGN KEY(series_id) REFERENCES series(id)
+            FOREIGN KEY(series_id) REFERENCES series(id) ON DELETE CASCADE ON UPDATE CASCADE
         );
 
         CREATE UNIQUE INDEX game_series_id_version_index ON game(series_id, version);
@@ -34,7 +36,7 @@ void DBUtil::initialize() {
             id INTEGER PRIMARY KEY,
             game_id INTEGER NOT NULL,
             code TEXT NOT NULL,
-            FOREIGN KEY(game_id) REFERENCES game(id)
+            FOREIGN KEY(game_id) REFERENCES game(id) ON DELETE CASCADE ON UPDATE CASCADE
         );
 
         CREATE TABLE sdvx_song (
@@ -42,7 +44,7 @@ void DBUtil::initialize() {
             release_id INTEGER NOT NULL,
             title TEXT NOT NULL,
             artist TEXT NOT NULL,
-            FOREIGN KEY(release_id) REFERENCES release(id)
+            FOREIGN KEY(release_id) REFERENCES release(id) ON DELETE CASCADE ON UPDATE CASCADE
         );
     )");
 
