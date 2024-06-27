@@ -97,9 +97,6 @@ void SDVXParserPanel::loadTreeData() {
         if(song.songEntryParseStatus == ParseStatus::MATCHED) {
             infoText += " Song Entry: ✅";
         }
-        else if(song.songEntryParseStatus == ParseStatus::MULTIPLE_MATCHES) {
-            infoText += " Song Entry: ⚠️";
-        }
 
         parsedDataTreeList->SetItemText(item, 1, wxString::FromUTF8(infoText));
 

@@ -172,20 +172,23 @@ void SDVXManager::checkSongs(std::vector<SDVXParsedSong>& songs, std::uint32_t r
             song.songParseStatus = ParseStatus::MATCHED;
 
             auto songId = songQuery.getColumn("id").getInt();
-            std::string where = "sdvx_song_id = ? AND internal_id = ? AND infinite_version = ?";
 
-            auto songEntryCountQuery = DBUtil::prepare("SELECT COUNT(*) FROM sdvx_song_entry WHERE " + where + ";");
-            songEntryCountQuery.bind(1, songId);
-            songEntryCountQuery.bind(2, song.internalId);
-            songEntryCountQuery.bind(3, song.infiniteVersion);
-            songEntryCountQuery.executeStep();
-            auto count = songEntryCountQuery.getColumn(0).getInt();
-
-            if(count == 1) {
+            auto songEntryQuery = DBUtil::prepare(R"(
+                SELECT *
+                FROM sdvx_song_entry
+                JOIN sdvx_song_entry_release ON sdvx_song_entry.id = sdvx_song_entry_release.sdvx_song_entry_id
+                WHERE
+                    sdvx_song_entry.sdvx_song_id = ? AND
+                    sdvx_song_entry.internal_id = ? AND
+                    sdvx_song_entry.infinite_version = ? AND
+                    sdvx_song_entry_release.release_id = ?;
+            )");
+            songEntryQuery.bind(1, songId);
+            songEntryQuery.bind(2, song.internalId);
+            songEntryQuery.bind(3, song.infiniteVersion);
+            songEntryQuery.bind(4, releaseId);
+            if(songEntryQuery.executeStep()) {
                 song.songEntryParseStatus = ParseStatus::MATCHED;
-            }
-            else if(count > 1) {
-                song.songEntryParseStatus = ParseStatus::MULTIPLE_MATCHES;
             }
         }
     }
