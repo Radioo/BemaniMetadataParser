@@ -8,9 +8,8 @@
 #include <cstdint>
 
 enum class ParseStatus : std::uint8_t {
-    EXISTS,
-    DOES_NOT_EXIST,
-    MODIFIED,
+    MATCHED,
+    MULTIPLE_MATCHES,
 };
 
 #endif //BEMANIMETADATAPARSER_PARSESTATUS_HPP

@@ -41,10 +41,48 @@ void DBUtil::initialize() {
 
         CREATE TABLE sdvx_song (
             id INTEGER PRIMARY KEY,
-            release_id INTEGER NOT NULL,
             title TEXT NOT NULL,
-            artist TEXT NOT NULL,
-            FOREIGN KEY(release_id) REFERENCES release(id) ON DELETE CASCADE ON UPDATE CASCADE
+            artist TEXT NOT NULL
+        );
+
+        CREATE TABLE sdvx_song_entry (
+            id INTEGER PRIMARY KEY,
+            sdvx_song_id INTEGER NOT NULL,
+            internal_id INTEGER NOT NULL,
+            infinite_version INTEGER,
+            FOREIGN KEY(sdvx_song_id) REFERENCES sdvx_song(id) ON DELETE CASCADE ON UPDATE CASCADE
+        );
+
+        CREATE TABLE sdvx_chart (
+            id INTEGER PRIMARY KEY,
+            sdvx_song_id INTEGER NOT NULL,
+            FOREIGN KEY(sdvx_song_id) REFERENCES sdvx_song(id) ON DELETE CASCADE ON UPDATE CASCADE
+        );
+
+        CREATE TABLE sdvx_chart_entry (
+            id INTEGER PRIMARY KEY,
+            sdvx_chart_id INTEGER NOT NULL,
+            difficulty INTEGER NOT NULL,
+            level INTEGER NOT NULL,
+            limited INTEGER,
+            max_ex_score INTEGER,
+            FOREIGN KEY(sdvx_chart_id) REFERENCES sdvx_chart(id) ON DELETE CASCADE ON UPDATE CASCADE
+        );
+
+        CREATE TABLE sdvx_song_entry_release (
+            release_id INTEGER NOT NULL,
+            sdvx_song_entry_id INTEGER NOT NULL,
+            PRIMARY KEY(release_id, sdvx_song_entry_id),
+            FOREIGN KEY(release_id) REFERENCES release(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(sdvx_song_entry_id) REFERENCES sdvx_song_entry(id) ON DELETE CASCADE ON UPDATE CASCADE
+        );
+
+        CREATE TABLE sdvx_chart_entry_release (
+            release_id INTEGER NOT NULL,
+            sdvx_chart_entry_id INTEGER NOT NULL,
+            PRIMARY KEY(release_id, sdvx_chart_entry_id),
+            FOREIGN KEY(release_id) REFERENCES release(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(sdvx_chart_entry_id) REFERENCES sdvx_chart_entry(id) ON DELETE CASCADE ON UPDATE CASCADE
         );
     )");
 

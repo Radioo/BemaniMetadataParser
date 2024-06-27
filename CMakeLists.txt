@@ -12,7 +12,13 @@ include(cmake/get_cpm.cmake)
 
 add_subdirectory(ChartManager)
 
-CPMAddPackage("gh:wxWidgets/wxWidgets@3.2.5")
+CPMAddPackage(
+        NAME wxWidgets
+        VERSION 3.2.5
+        GITHUB_REPOSITORY wxWidgets/wxWidgets
+        OPTIONS
+            "wxUSE_STL yes"
+)
 
 add_executable(BemaniMetadataParser
         main.cpp
@@ -25,6 +31,13 @@ add_executable(BemaniMetadataParser
         src/Panels/EditGamePanel.cpp
         src/Panels/ReleasePanel.cpp
         src/Panels/EditReleasePanel.cpp
+        src/Panels/ReleasePickerPanel.cpp
+        src/Panels/SdvxParserMenuPanel.cpp
+        src/Panels/SdvxParserPanel.cpp
 )
+
+# Include msw/rc for windows
+message(STATUS "wxWidgets_INCLUDE_DIRS: ${wxWidgets_SOURCE_DIR}")
+target_sources(BemaniMetadataParser PRIVATE ${wxWidgets_SOURCE_DIR}/include/wx/msw/wx.rc)
 
 target_link_libraries(BemaniMetadataParser PRIVATE ChartManager wxcore)

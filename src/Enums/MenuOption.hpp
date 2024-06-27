@@ -12,6 +12,7 @@ enum class MenuOption : std::uint8_t {
     SERIES,
     GAME,
     RELEASE,
+    SDVX_PARSER,
 };
 
 #endif //BEMANIMETADATAPARSER_MENUOPTION_HPP

@@ -7,6 +7,8 @@
 #include "Frames/MainFrame.hpp"
 
 bool App::OnInit() {
+    SetConsoleOutputCP(65001);
+
     ChartManager chartManager({});
     auto* mainFrame = new MainFrame(chartManager);
     mainFrame->Show();

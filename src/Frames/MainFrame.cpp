@@ -6,7 +6,10 @@
 #include "../Panels/SeriesPanel.hpp"
 #include "../Panels/GamePanel.hpp"
 #include "../Panels/ReleasePanel.hpp"
+#include "../Panels/ReleasePickerPanel.hpp"
 #include "../Enums/MenuOption.hpp"
+#include "../Panels/SdvxParserMenuPanel.hpp"
+#include "Model/ReleaseInfo.hpp"
 
 MainFrame::MainFrame(ChartManager& chartManager) : wxFrame(nullptr, wxID_ANY, wxT("Bemani Metadata Parser"), wxDefaultPosition, {1280, 780}), chartManager(chartManager) {
     this->setupMenuBar();
@@ -31,9 +34,14 @@ void MainFrame::setupMenuBar() {
     generalOptions->Append(static_cast<int>(MenuOption::RELEASE), wxT("Release"));
     Bind(wxEVT_MENU, [this](wxCommandEvent& event) {this->switchPanel(new ReleasePanel(this, this->chartManager));}, static_cast<int>(MenuOption::RELEASE));
 
+    auto* sdvxOptions = new wxMenu;
+    sdvxOptions->Append(static_cast<int>(MenuOption::SDVX_PARSER), wxT("Parser"));
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event) {this->switchPanel(new SDVXParserMenuPanel(this, this->chartManager));}, static_cast<int>(MenuOption::SDVX_PARSER));
+
     auto* menuBar = new wxMenuBar;
     menuBar->Append(fileOptions, wxT("File"));
     menuBar->Append(generalOptions, wxT("General"));
+    menuBar->Append(sdvxOptions, wxT("SDVX"));
 
     SetMenuBar(menuBar);
 }

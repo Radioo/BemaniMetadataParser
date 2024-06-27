@@ -25,12 +25,14 @@ public:
     void deleteSeries(std::uint32_t id);
 
     std::vector<Game> getGames();
+    std::vector<Game> getGamesBySeries(std::uint32_t seriesId);
     Game getGame(std::uint32_t id);
     void addGame(std::uint32_t seriesId, std::string& name, std::uint8_t version);
     void updateGame(Game& game);
     void deleteGame(std::uint32_t id);
 
     std::vector<Release> getReleases();
+    std::vector<Release> getReleasesByGame(std::uint32_t gameId);
     Release getRelease(std::uint32_t id);
     void addRelease(std::uint32_t gameId, std::string& code);
     void updateRelease(Release& release);

@@ -60,16 +60,133 @@ std::vector<SDVXParsedSong> SDVXManager::parseMusicDb(std::filesystem::path& mus
         }
 
         auto infoNode = musicNode.child("info");
+        auto title = std::string(infoNode.child("title_name").text().as_string());
+        auto artist = std::string(infoNode.child("artist_name").text().as_string());
         output.push_back({
             .songParseStatus = std::nullopt,
             .songEntryParseStatus = std::nullopt,
-            .title = infoNode.child("title_name").text().as_string(),
-            .artist = infoNode.child("artist_name").text().as_string(),
+            .title = title,
+            .artist = artist,
             .internalId = musicNode.attribute("id").as_uint(),
             .infiniteVersion = static_cast<std::uint8_t>(infoNode.child("inf_ver").text().as_uint()),
             .charts = charts
         });
     }
 
+    checkSongs(output, releaseId);
     return output;
+}
+
+const std::string& SDVXManager::getDifficultyName(SDVXDifficulty difficulty, std::uint8_t infiniteVersion) {
+    switch(difficulty) {
+        case SDVXDifficulty::NOVICE:
+            return DIFFICULTY_NOVICE;
+        case SDVXDifficulty::ADVANCED:
+            return DIFFICULTY_ADVANCED;
+        case SDVXDifficulty::EXHAUST:
+            return DIFFICULTY_EXHAUST;
+        case SDVXDifficulty::INFINITE:
+            switch(infiniteVersion) {
+                case 2:
+                    return DIFFICULTY_INFINITE;
+                case 3:
+                    return DIFFICULTY_GRAVITY;
+                case 4:
+                    return DIFFICULTY_HEAVENLY;
+                case 5:
+                    return DIFFICULTY_VIVID;
+                case 6:
+                    return DIFFICULTY_EXCEED;
+                default:
+                    throw std::invalid_argument("Invalid infinite version " + std::to_string(infiniteVersion));
+            }
+        case SDVXDifficulty::MAXIMUM:
+            return DIFFICULTY_MAXIMUM;
+    }
+
+    throw std::invalid_argument("Invalid difficulty " + std::to_string(static_cast<std::uint8_t>(difficulty)));
+}
+
+void SDVXManager::addSong(SDVXParsedSong& song, std::uint32_t releaseId) {
+    auto& db = DBUtil::getDb();
+    auto transaction = SQLite::Transaction(db);
+
+    try {
+        auto songInsertQuery = SQLite::Statement(db, "INSERT INTO sdvx_song (title, artist) VALUES (?, ?);");
+        songInsertQuery.bind(1, song.title);
+        songInsertQuery.bind(2, song.artist);
+        songInsertQuery.exec();
+        auto songId = db.getLastInsertRowid();
+
+        auto songEntryInsertQuery = SQLite::Statement(db, "INSERT INTO sdvx_song_entry (sdvx_song_id, internal_id, infinite_version) VALUES (?, ?, ?);");
+        songEntryInsertQuery.bind(1, songId);
+        songEntryInsertQuery.bind(2, song.internalId);
+        songEntryInsertQuery.bind(3, song.infiniteVersion);
+        songEntryInsertQuery.exec();
+        auto songEntryId = db.getLastInsertRowid();
+
+        auto songEntryReleaseInsertQuery = SQLite::Statement(db, "INSERT INTO sdvx_song_entry_release (release_id, sdvx_song_entry_id) VALUES (?, ?);");
+        songEntryReleaseInsertQuery.bind(1, releaseId);
+        songEntryReleaseInsertQuery.bind(2, songEntryId);
+        songEntryReleaseInsertQuery.exec();
+
+        for(const auto& chart : song.charts) {
+            auto chartInsertQuery = SQLite::Statement(db, "INSERT INTO sdvx_chart (sdvx_song_id) VALUES (?);");
+            chartInsertQuery.bind(1, songId);
+            chartInsertQuery.exec();
+            auto chartId = db.getLastInsertRowid();
+
+            auto chartEntryInsertQuery = SQLite::Statement(db, "INSERT INTO sdvx_chart_entry (sdvx_chart_id, difficulty, level, limited, max_ex_score) VALUES (?, ?, ?, ?, ?);");
+            chartEntryInsertQuery.bind(1, chartId);
+            chartEntryInsertQuery.bind(2, static_cast<std::uint8_t>(chart.difficulty));
+            chartEntryInsertQuery.bind(3, chart.level);
+            chartEntryInsertQuery.bind(4, chart.limited);
+            chartEntryInsertQuery.bind(5, chart.maxExScore);
+            chartEntryInsertQuery.exec();
+            auto chartEntryId = db.getLastInsertRowid();
+
+            auto chartEntryReleaseInsertQuery = SQLite::Statement(db, "INSERT INTO sdvx_chart_entry_release (release_id, sdvx_chart_entry_id) VALUES (?, ?);");
+            chartEntryReleaseInsertQuery.bind(1, releaseId);
+            chartEntryReleaseInsertQuery.bind(2, chartEntryId);
+            chartEntryReleaseInsertQuery.exec();
+        }
+
+        transaction.commit();
+    }
+    catch(const std::exception& e) {
+        transaction.rollback();
+        throw e;
+    }
+    catch(...) {
+        transaction.rollback();
+        throw std::runtime_error("Unknown while adding SDVX song");
+    }
+}
+
+void SDVXManager::checkSongs(std::vector<SDVXParsedSong>& songs, std::uint32_t releaseId) {
+    for(auto& song : songs) {
+        auto songQuery = DBUtil::prepare("SELECT * FROM sdvx_song WHERE title = ? AND artist = ?;");
+        songQuery.bind(1, song.title);
+        songQuery.bind(2, song.artist);
+        if(songQuery.executeStep()) {
+            song.songParseStatus = ParseStatus::MATCHED;
+
+            auto songId = songQuery.getColumn("id").getInt();
+            std::string where = "sdvx_song_id = ? AND internal_id = ? AND infinite_version = ?";
+
+            auto songEntryCountQuery = DBUtil::prepare("SELECT COUNT(*) FROM sdvx_song_entry WHERE " + where + ";");
+            songEntryCountQuery.bind(1, songId);
+            songEntryCountQuery.bind(2, song.internalId);
+            songEntryCountQuery.bind(3, song.infiniteVersion);
+            songEntryCountQuery.executeStep();
+            auto count = songEntryCountQuery.getColumn(0).getInt();
+
+            if(count == 1) {
+                song.songEntryParseStatus = ParseStatus::MATCHED;
+            }
+            else if(count > 1) {
+                song.songEntryParseStatus = ParseStatus::MULTIPLE_MATCHES;
+            }
+        }
+    }
 }

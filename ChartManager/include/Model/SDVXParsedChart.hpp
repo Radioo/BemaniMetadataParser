@@ -14,6 +14,7 @@
 struct SDVXParsedChart {
     std::optional<ParseStatus> chartParseStatus;
     std::optional<ParseStatus> chartEntryParseStatus;
+
     SDVXDifficulty difficulty;
     std::uint8_t level;
     std::uint8_t limited;

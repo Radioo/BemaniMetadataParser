@@ -213,3 +213,48 @@ void GameManager::deleteRelease(std::uint32_t id) {
         throw std::runtime_error("Failed to delete release");
     }
 }
+
+std::vector<Game> GameManager::getGamesBySeries(std::uint32_t seriesId) {
+    auto countQuery = DBUtil::prepare("SELECT COUNT(*) FROM game WHERE series_id = ?");
+    countQuery.bind(1, seriesId);
+    countQuery.executeStep();
+    auto count = countQuery.getColumn(0).getInt();
+
+    auto gameQuery = DBUtil::prepare("SELECT * FROM game WHERE series_id = ?");
+    gameQuery.bind(1, seriesId);
+    std::vector<Game> games(count);
+
+    std::uint32_t i = 0;
+    while(gameQuery.executeStep()) {
+        games[i++] = {
+            gameQuery.getColumn(0).getUInt(),
+            gameQuery.getColumn(1).getUInt(),
+            gameQuery.getColumn(2).getString(),
+            static_cast<std::uint8_t>(gameQuery.getColumn(3).getUInt())
+        };
+    }
+
+    return games;
+}
+
+std::vector<Release> GameManager::getReleasesByGame(std::uint32_t gameId) {
+    auto countQuery = DBUtil::prepare("SELECT COUNT(*) FROM release WHERE game_id = ?");
+    countQuery.bind(1, gameId);
+    countQuery.executeStep();
+    auto count = countQuery.getColumn(0).getInt();
+
+    auto releaseQuery = DBUtil::prepare("SELECT * FROM release WHERE game_id = ?");
+    releaseQuery.bind(1, gameId);
+    std::vector<Release> releases(count);
+
+    std::uint32_t i = 0;
+    while(releaseQuery.executeStep()) {
+        releases[i++] = {
+            releaseQuery.getColumn(0).getUInt(),
+            releaseQuery.getColumn(1).getUInt(),
+            releaseQuery.getColumn(2).getString()
+        };
+    }
+
+    return releases;
+}
