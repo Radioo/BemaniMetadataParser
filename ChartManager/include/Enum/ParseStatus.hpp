@@ -8,6 +8,8 @@
 #include <cstdint>
 
 enum class ParseStatus : std::uint8_t {
+    EXISTS,
+    NOT_FOUND,
     MATCHED,
     MULTIPLE_MATCHES,
 };

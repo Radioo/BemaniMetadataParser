@@ -21,6 +21,7 @@ public:
 
     std::vector<SDVXParsedSong> parseMusicDb(std::filesystem::path& musicDbPath, std::uint32_t releaseId);
     void addSong(SDVXParsedSong& song, std::uint32_t releaseId);
+    void checkSongs(std::vector<SDVXParsedSong>& songs, std::uint32_t releaseId);
 private:
     static inline constexpr std::string DIFFICULTY_NOVICE = "NOVICE";
     static inline constexpr std::string DIFFICULTY_ADVANCED = "ADVANCED";
@@ -33,7 +34,6 @@ private:
     static inline constexpr std::string DIFFICULTY_EXCEED = "EXCEED";
 
     static SDVXDifficulty getDifficultyFromXml(std::string&& difficulty);
-    void checkSongs(std::vector<SDVXParsedSong>& songs, std::uint32_t releaseId);
 };
 
 #endif //BEMANIMETADATAPARSER_SDVXMANAGER_HPP

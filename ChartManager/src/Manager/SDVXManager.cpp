@@ -169,7 +169,7 @@ void SDVXManager::checkSongs(std::vector<SDVXParsedSong>& songs, std::uint32_t r
         songQuery.bind(1, song.title);
         songQuery.bind(2, song.artist);
         if(songQuery.executeStep()) {
-            song.songParseStatus = ParseStatus::MATCHED;
+            song.songParseStatus = ParseStatus::EXISTS;
 
             auto songId = songQuery.getColumn("id").getInt();
 
@@ -188,8 +188,40 @@ void SDVXManager::checkSongs(std::vector<SDVXParsedSong>& songs, std::uint32_t r
             songEntryQuery.bind(3, song.infiniteVersion);
             songEntryQuery.bind(4, releaseId);
             if(songEntryQuery.executeStep()) {
-                song.songEntryParseStatus = ParseStatus::MATCHED;
+                song.songEntryParseStatus = ParseStatus::EXISTS;
             }
+            else {
+                song.songEntryParseStatus = ParseStatus::NOT_FOUND;
+            }
+
+            for(auto& chart : song.charts) {
+                auto chartEntryQuery = DBUtil::prepare(R"(
+                    SELECT *
+                    FROM sdvx_chart_entry
+                    JOIN sdvx_chart ON sdvx_chart_entry.sdvx_chart_id = sdvx_chart.id
+                    JOIN sdvx_song ON sdvx_chart.sdvx_song_id = sdvx_song.id
+                    JOIN sdvx_chart_entry_release ON sdvx_chart_entry.id = sdvx_chart_entry_release.sdvx_chart_entry_id
+                    WHERE
+                        sdvx_song.id = ? AND
+                        sdvx_chart_entry_release.release_id = ? AND
+                        sdvx_chart_entry.difficulty = ? AND
+                        sdvx_chart_entry.level = ? AND
+                        sdvx_chart_entry.limited = ? AND
+                        sdvx_chart_entry.max_ex_score = ?;
+                )");
+                chartEntryQuery.bind(1, songId);
+                chartEntryQuery.bind(2, releaseId);
+                chartEntryQuery.bind(3, static_cast<std::uint8_t>(chart.difficulty));
+                chartEntryQuery.bind(4, chart.level);
+                chartEntryQuery.bind(5, chart.limited);
+                chartEntryQuery.bind(6, chart.maxExScore);
+                if(chartEntryQuery.executeStep()) {
+                    chart.chartEntryParseStatus = ParseStatus::EXISTS;
+                }
+            }
+        }
+        else {
+            song.songParseStatus = ParseStatus::NOT_FOUND;
         }
     }
 }
